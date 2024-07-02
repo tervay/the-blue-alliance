@@ -73,7 +73,7 @@ from backend.common.flask_cache import configure_flask_cache
 from backend.common.logging import configure_logging
 from backend.common.middleware import install_middleware
 from backend.common.url_converters import install_url_converters
-from backend.api.handlers.insights import insights_all, insights_notables
+from backend.api.handlers.insights import insights_notables
 
 
 class SimpleModelTypeConverter(BaseConverter):

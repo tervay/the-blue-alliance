@@ -1,6 +1,6 @@
 from json import JSONDecodeError
 
-from flask import Blueprint, Flask, make_response, Response
+from flask import Blueprint, Flask, Response, make_response
 from flask_cors import CORS
 from google.appengine.api import wrap_wsgi_app
 from werkzeug.routing import BaseConverter
@@ -34,6 +34,7 @@ from backend.api.handlers.event import (
     event_teams_statuses,
 )
 from backend.api.handlers.helpers.profiled_jsonify import profiled_jsonify
+from backend.api.handlers.insights import insights_notables
 from backend.api.handlers.match import match, zebra_motionworks
 from backend.api.handlers.media import media_tags
 from backend.api.handlers.status import status
@@ -73,7 +74,6 @@ from backend.common.flask_cache import configure_flask_cache
 from backend.common.logging import configure_logging
 from backend.common.middleware import install_middleware
 from backend.common.url_converters import install_url_converters
-from backend.api.handlers.insights import insights_notables
 
 
 class SimpleModelTypeConverter(BaseConverter):

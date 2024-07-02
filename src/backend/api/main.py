@@ -73,6 +73,7 @@ from backend.common.flask_cache import configure_flask_cache
 from backend.common.logging import configure_logging
 from backend.common.middleware import install_middleware
 from backend.common.url_converters import install_url_converters
+from backend.api.handlers.insights import insights_all, insights_notables
 
 
 class SimpleModelTypeConverter(BaseConverter):
@@ -265,6 +266,9 @@ api_v3.add_url_rule(
     "/teams/<int:year>/<int:page_num>/<model_type:model_type>",
     view_func=team_list,
 )
+
+# Insights
+api_v3.add_url_rule("/insights/notables", view_func=insights_notables)
 
 # Trusted API
 trusted_api = Blueprint("trusted_api", __name__, url_prefix="/api/trusted/v1")

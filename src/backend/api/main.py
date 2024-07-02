@@ -1,6 +1,6 @@
 from json import JSONDecodeError
 
-from flask import Blueprint, Flask, Response, make_response
+from flask import Blueprint, Flask, make_response, Response
 from flask_cors import CORS
 from google.appengine.api import wrap_wsgi_app
 from werkzeug.routing import BaseConverter

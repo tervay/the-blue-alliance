@@ -31,7 +31,7 @@ class InsightConverter(ConverterBase):
         return InsightDict(
             {
                 "name": insight.name,
-                "data_json": json.loads(insight.data_json),
+                "data": json.loads(insight.data_json),
                 "year": insight.year,
             }
         )

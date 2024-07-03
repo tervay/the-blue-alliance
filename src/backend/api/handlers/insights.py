@@ -1,42 +1,85 @@
 from flask import Response
 
-from backend.api.handlers.decorators import api_authenticated, validate_keys
+from backend.api.handlers.decorators import api_authenticated
 from backend.api.handlers.helpers.profiled_jsonify import profiled_jsonify
 from backend.api.handlers.helpers.track_call import track_call_after_response
 from backend.common.consts.api_version import ApiMajorVersion
+from backend.common.consts.insight_type import LEADERBOARD_INSIGHTS, NOTABLES_INSIGHTS
 from backend.common.decorators import cached_public
 from backend.common.models.insight import Insight
-from backend.common.queries.insight_query import InsightAllYearsQuery
+from backend.common.queries.insight_query import (
+    InsightsByNameAndYearQuery,
+    InsightsByNameQuery,
+)
 
 
-@api_authenticated
-@validate_keys
 @cached_public
-def insights_notables() -> Response:
-    """
-    Returns data about teams that may be:
-    - HOF
-    - CMP winners
-    - WFA winners (todo)
-    """
-    track_call_after_response("insights/notables")
-    hof = {
-        insight_dict["year"]: insight_dict["data_json"]
-        for insight_dict in InsightAllYearsQuery(
-            insight_name=Insight.INSIGHT_NAMES[Insight.CA_WINNER]
-        ).fetch_dict(ApiMajorVersion.API_V3)
-    }
-    cmp_winners = {
-        insight_dict["year"]: insight_dict["data_json"]
-        for insight_dict in InsightAllYearsQuery(
-            insight_name=Insight.INSIGHT_NAMES[Insight.WORLD_CHAMPIONS]
-        ).fetch_dict(ApiMajorVersion.API_V3)
-        if insight_dict["year"] != 0
-    }
+def insights_leaderboards_all() -> Response:
+    track_call_after_response("insights/leaderboards/all")
+    futures = []
+    for insight_type in LEADERBOARD_INSIGHTS:
+        futures.append(
+            InsightsByNameQuery(
+                insight_name=Insight.INSIGHT_NAMES[insight_type]
+            ).fetch_dict_async(ApiMajorVersion.API_V3)
+        )
 
-    return profiled_jsonify(
-        {
-            "hof": hof,
-            "cmp_winners": cmp_winners,
-        }
-    )
+    insights = []
+    for future in futures:
+        insights.extend(future.get_result())
+
+    return profiled_jsonify(insights)
+
+
+@cached_public
+def insights_leaderboards_year(year: int) -> Response:
+    track_call_after_response("insights/leaderboards", year)
+    futures = []
+    for insight_type in LEADERBOARD_INSIGHTS:
+        futures.append(
+            InsightsByNameAndYearQuery(
+                insight_name=Insight.INSIGHT_NAMES[insight_type], year=year
+            ).fetch_dict_async(ApiMajorVersion.API_V3)
+        )
+
+    insights = []
+    for future in futures:
+        insights.extend(future.get_result())
+
+    return profiled_jsonify(insights)
+
+
+@cached_public
+def insights_notables_all() -> Response:
+    track_call_after_response("insights/notables/all")
+    futures = []
+    for notable_type in NOTABLES_INSIGHTS:
+        futures.append(
+            InsightsByNameQuery(
+                insight_name=Insight.INSIGHT_NAMES[notable_type]
+            ).fetch_dict_async(ApiMajorVersion.API_V3)
+        )
+
+    insights = []
+    for future in futures:
+        insights.extend(future.get_result())
+
+    return profiled_jsonify(insights)
+
+
+@cached_public
+def insights_notables_year(year: int) -> Response:
+    track_call_after_response("insights/notables", year)
+    futures = []
+    for notable_type in NOTABLES_INSIGHTS:
+        futures.append(
+            InsightsByNameAndYearQuery(
+                insight_name=Insight.INSIGHT_NAMES[notable_type], year=year
+            ).fetch_dict_async(ApiMajorVersion.API_V3)
+        )
+
+    insights = []
+    for future in futures:
+        insights.extend(future.get_result())
+
+    return profiled_jsonify(insights)

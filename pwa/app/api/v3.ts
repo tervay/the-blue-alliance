@@ -157,7 +157,7 @@ export type Event = {
   /** Event Type, eg Regional, District, or Offseason. */
   event_type_string: string;
   /** Week of the event relative to the first official season event, zero-indexed. Only valid for Regionals, Districts, and District Championships. Null otherwise. (Eg. A season with a week 0 'preseason' event does not count, and week 1 events will show 0 here. Seasons with a week 0.5 regional event will show week 0 for those event(s) and week 1 for week 1 events and so on.) */
-  week?: number;
+  week?: number | null;
   /** Address of the event's venue, if available. */
   address?: string;
   /** Postal code from the event address. */

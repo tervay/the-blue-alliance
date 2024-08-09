@@ -497,11 +497,19 @@ jobs:
     if: contains(github.event.commits[0].message, '[nodeploy]') == false
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 10 # Needed for Sentry release
       - name: Download production artifacts
         uses: actions/download-artifact@v4
         with:
           name: pwa-build
           path: pwa/build
+      - name: Set up Sentry Release
+        run: ./ops/pwa/set_sentry_release.sh
+        env:
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:

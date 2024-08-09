@@ -3951,7 +3951,12 @@
         "required": [
           "key",
           "name",
-          "team_number"
+          "team_number",
+          "nickname",
+          "name",
+          "city",
+          "state_prov",
+          "country"
         ],
         "type": "object",
         "properties": {
@@ -3965,22 +3970,27 @@
           },
           "nickname": {
             "type": "string",
+            "nullable": true,
             "description": "Team nickname provided by FIRST."
           },
           "name": {
             "type": "string",
+            "nullable": true,
             "description": "Official long name registered with FIRST."
           },
           "city": {
             "type": "string",
+            "nullable": true,
             "description": "City of team derived from parsing the address registered with FIRST."
           },
           "state_prov": {
             "type": "string",
+            "nullable": true,
             "description": "State of team derived from parsing the address registered with FIRST."
           },
           "country": {
             "type": "string",
+            "nullable": true,
             "description": "Country of team derived from parsing the address registered with FIRST."
           }
         }
@@ -3989,7 +3999,21 @@
         "required": [
           "key",
           "name",
-          "team_number"
+          "team_number",
+          "nickname",
+          "name",
+          "school_name",
+          "city",
+          "state_prov",
+          "country",
+          "address",
+          "postal_code",
+          "gmaps_place_id",
+          "gmaps_url",
+          "lat",
+          "lng",
+          "location_name",
+          "rookie_year"
         ],
         "type": "object",
         "properties": {
@@ -4003,26 +4027,32 @@
           },
           "nickname": {
             "type": "string",
+            "nullable": true,
             "description": "Team nickname provided by FIRST."
           },
           "name": {
             "type": "string",
+            "nullable": true,
             "description": "Official long name registered with FIRST."
           },
           "school_name": {
             "type": "string",
+            "nullable": true,
             "description": "Name of team school or affilited group registered with FIRST."
           },
           "city": {
             "type": "string",
+            "nullable": true,
             "description": "City of team derived from parsing the address registered with FIRST."
           },
           "state_prov": {
             "type": "string",
+            "nullable": true,
             "description": "State of team derived from parsing the address registered with FIRST."
           },
           "country": {
             "type": "string",
+            "nullable": true,
             "description": "Country of team derived from parsing the address registered with FIRST."
           },
           "address": {
@@ -4032,6 +4062,7 @@
           },
           "postal_code": {
             "type": "string",
+            "nullable": true,
             "description": "Postal code from the team address."
           },
           "gmaps_place_id": {
@@ -4047,11 +4078,13 @@
           },
           "lat": {
             "type": "number",
+            "nullable": true,
             "description": "Will be NULL, for future development.",
             "format": "double"
           },
           "lng": {
             "type": "number",
+            "nullable": true,
             "description": "Will be NULL, for future development.",
             "format": "double"
           },
@@ -4068,17 +4101,8 @@
           },
           "rookie_year": {
             "type": "integer",
-            "description": "First year the team officially competed."
-          },
-          "motto": {
-            "type": "string",
             "nullable": true,
-            "description": "Team's motto as provided by FIRST. This field is deprecated and will return null - will be removed at end-of-season in 2019."
-          },
-          "home_championship": {
-            "type": "object",
-            "properties": {},
-            "description": "Location of the team's home championship each year as a key-value pair. The year (as a string) is the key, and the city is the value."
+            "description": "First year the team officially competed."
           }
         }
       },
@@ -4239,6 +4263,7 @@
           },
           "week": {
             "type": "integer",
+            "nullable": "true",
             "description": "Week of the event relative to the first official season event, zero-indexed. Only valid for Regionals, Districts, and District Championships. Null otherwise. (Eg. A season with a week 0 'preseason' event does not count, and week 1 events will show 0 here. Seasons with a week 0.5 regional event will show week 0 for those event(s) and week 1 for week 1 events and so on.)"
           },
           "address": {

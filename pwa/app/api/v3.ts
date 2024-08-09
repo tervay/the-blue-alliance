@@ -38,39 +38,35 @@ export type Team = {
   /** Official team number issued by FIRST. */
   team_number: number;
   /** Team nickname provided by FIRST. */
-  nickname?: string;
+  nickname: string | null;
   /** Official long name registered with FIRST. */
-  name: string;
+  name: string | null;
   /** Name of team school or affilited group registered with FIRST. */
-  school_name?: string;
+  school_name: string | null;
   /** City of team derived from parsing the address registered with FIRST. */
-  city?: string;
+  city: string | null;
   /** State of team derived from parsing the address registered with FIRST. */
-  state_prov?: string;
+  state_prov: string | null;
   /** Country of team derived from parsing the address registered with FIRST. */
-  country?: string;
+  country: string | null;
   /** Will be NULL, for future development. */
-  address?: string | null;
+  address: string | null;
   /** Postal code from the team address. */
-  postal_code?: string;
+  postal_code: string | null;
   /** Will be NULL, for future development. */
-  gmaps_place_id?: string | null;
+  gmaps_place_id: string | null;
   /** Will be NULL, for future development. */
-  gmaps_url?: string | null;
+  gmaps_url: string | null;
   /** Will be NULL, for future development. */
-  lat?: number;
+  lat: number | null;
   /** Will be NULL, for future development. */
-  lng?: number;
+  lng: number | null;
   /** Will be NULL, for future development. */
-  location_name?: string | null;
+  location_name: string | null;
   /** Official website associated with the team. */
   website?: string | null;
   /** First year the team officially competed. */
-  rookie_year?: number;
-  /** Team's motto as provided by FIRST. This field is deprecated and will return null - will be removed at end-of-season in 2019. */
-  motto?: string | null;
-  /** Location of the team's home championship each year as a key-value pair. The year (as a string) is the key, and the city is the value. */
-  home_championship?: {};
+  rookie_year: number | null;
 };
 export type TeamSimple = {
   /** TBA team key with the format `frcXXXX` with `XXXX` representing the team number. */
@@ -78,15 +74,15 @@ export type TeamSimple = {
   /** Official team number issued by FIRST. */
   team_number: number;
   /** Team nickname provided by FIRST. */
-  nickname?: string;
+  nickname: string | null;
   /** Official long name registered with FIRST. */
-  name: string;
+  name: string | null;
   /** City of team derived from parsing the address registered with FIRST. */
-  city?: string;
+  city: string | null;
   /** State of team derived from parsing the address registered with FIRST. */
-  state_prov?: string;
+  state_prov: string | null;
   /** Country of team derived from parsing the address registered with FIRST. */
-  country?: string;
+  country: string | null;
 };
 export type DistrictList = {
   /** The short identifier for the district. */
@@ -157,7 +153,7 @@ export type Event = {
   /** Event Type, eg Regional, District, or Offseason. */
   event_type_string: string;
   /** Week of the event relative to the first official season event, zero-indexed. Only valid for Regionals, Districts, and District Championships. Null otherwise. (Eg. A season with a week 0 'preseason' event does not count, and week 1 events will show 0 here. Seasons with a week 0.5 regional event will show week 0 for those event(s) and week 1 for week 1 events and so on.) */
-  week?: number;
+  week?: number | null;
   /** Address of the event's venue, if available. */
   address?: string;
   /** Postal code from the event address. */

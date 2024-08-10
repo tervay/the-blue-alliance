@@ -1,9 +1,12 @@
+from dataclasses import dataclass
+import dataclasses
 import json
-from typing import Set
+from typing import List, Set, TypedDict
 
 from google.appengine.ext import ndb
 
 from backend.common.models.cached_model import CachedModel
+from backend.common.models.keys import TeamKey
 
 
 class Insight(CachedModel):
@@ -36,6 +39,7 @@ class Insight(CachedModel):
     ELIM_WINNING_MARGIN_DISTRIBUTION = 20
     EINSTEIN_STREAK = 21
     MATCHES_PLAYED = 22
+    TYPED_LEADERBOARD_BLUE_BANNERS = 23
     YEAR_SPECIFIC_BY_WEEK = 999
     YEAR_SPECIFIC = 1000
 
@@ -64,9 +68,12 @@ class Insight(CachedModel):
         ELIM_WINNING_MARGIN_DISTRIBUTION: "elim_winning_margin_distribution",
         EINSTEIN_STREAK: "einstein_streak",
         MATCHES_PLAYED: "matches_played",
+        TYPED_LEADERBOARD_BLUE_BANNERS: "typed_leaderboard_blue_banners",
         YEAR_SPECIFIC_BY_WEEK: "year_specific_by_week",
         YEAR_SPECIFIC: "year_specific",
     }
+
+    TYPED_LEADERBOARD_INSIGHTS = {TYPED_LEADERBOARD_BLUE_BANNERS}
 
     name = ndb.StringProperty(required=True)  # general name used for sorting
     year = ndb.IntegerProperty(
@@ -109,3 +116,24 @@ class Insight(CachedModel):
             return "insights" + "_" + str(name)
         else:
             return str(year) + "insights" + "_" + str(name)
+
+
+@dataclass
+class LeaderboardRanking:
+    value: int
+    team_keys: List[TeamKey]
+
+
+@dataclass
+class LeaderboardInsight:
+    data: List[LeaderboardRanking]
+    name: str
+    year: int
+
+    def to_insight(self) -> Insight:
+        return Insight(
+            id=Insight.render_key_name(self.year, self.name),
+            name=self.name,
+            year=self.year,
+            data_json=json.dumps([dataclasses.asdict(d) for d in self.data]),
+        )

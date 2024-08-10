@@ -35,7 +35,6 @@ class TeamConverter(ConverterBase):
             "name": team.name if team.name else default_name,
             "website": team.website,
             "rookie_year": team.rookie_year,
-            "motto": None,
             # "home_championship": team.championship_location,  # TODO: event not ported yet
             "school_name": team.school_name,
         }
@@ -50,7 +49,7 @@ class TeamConverter(ConverterBase):
         team.name = data["name"]
         team.website = data["website"]
         team.rookie_year = data["rookie_year"]
-        team.motto = data["motto"]
+        team.motto = data.get("motto", None)
         team.city = data["city"]
         team.state_prov = data["state_prov"]
         team.country = data["country"]

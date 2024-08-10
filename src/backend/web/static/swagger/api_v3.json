@@ -5846,6 +5846,12 @@
       "Match_Score_Breakdown_2015": {
         "type": "object",
         "properties": {
+          "required": [
+            "blue",
+            "red",
+            "coopertition",
+            "coopertition_points"
+          ],
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2015_Alliance"
           },
@@ -5868,6 +5874,32 @@
       },
       "Match_Score_Breakdown_2015_Alliance": {
         "type": "object",
+        "required": [
+          "adjust_points",
+          "auto_points",
+          "container_count_level1",
+          "container_count_level2",
+          "container_count_level3",
+          "container_count_level4",
+          "container_count_level5",
+          "container_count_level6",
+          "container_points",
+          "container_set",
+          "foul_count",
+          "foul_points",
+          "litter_count_container",
+          "litter_count_landfill",
+          "litter_count_unprocessed",
+          "litter_points",
+          "robot_set",
+          "teleop_points",
+          "total_points",
+          "tote_count_far",
+          "tote_count_near",
+          "tote_points",
+          "tote_set",
+          "tote_stack"
+        ],
         "properties": {
           "auto_points": {
             "type": "integer"
@@ -5945,6 +5977,10 @@
       },
       "Match_Score_Breakdown_2016": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2016_Alliance"
@@ -5957,6 +5993,46 @@
       },
       "Match_Score_Breakdown_2016_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoBoulderPoints",
+          "autoBouldersHigh",
+          "autoBouldersLow",
+          "autoCrossingPoints",
+          "autoPoints",
+          "autoReachPoints",
+          "breachPoints",
+          "capturePoints",
+          "foulCount",
+          "foulPoints",
+          "position1crossings",
+          "position2",
+          "position2crossings",
+          "position3",
+          "position3crossings",
+          "position4",
+          "position4crossings",
+          "position5",
+          "position5crossings",
+          "robot1Auto",
+          "robot2Auto",
+          "robot3Auto",
+          "techFoulCount",
+          "teleopBoulderPoints",
+          "teleopBouldersHigh",
+          "teleopBouldersLow",
+          "teleopChallengePoints",
+          "teleopCrossingPoints",
+          "teleopDefensesBreached",
+          "teleopPoints",
+          "teleopScalePoints",
+          "teleopTowerCaptured",
+          "totalPoints",
+          "towerEndStrength",
+          "towerFaceA",
+          "towerFaceB",
+          "towerFaceC"
+        ],
         "properties": {
           "autoPoints": {
             "type": "integer"
@@ -6091,6 +6167,10 @@
       },
       "Match_Score_Breakdown_2017": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2017_Alliance"
@@ -6103,6 +6183,41 @@
       },
       "Match_Score_Breakdown_2017_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoFuelHigh",
+          "autoFuelLow",
+          "autoFuelPoints",
+          "autoMobilityPoints",
+          "autoPoints",
+          "autoRotorPoints",
+          "foulCount",
+          "foulPoints",
+          "kPaBonusPoints",
+          "kPaRankingPointAchieved",
+          "robot1Auto",
+          "robot2Auto",
+          "robot3Auto",
+          "rotor1Auto",
+          "rotor1Engaged",
+          "rotor2Auto",
+          "rotor2Engaged",
+          "rotor3Engaged",
+          "rotor4Engaged",
+          "rotorBonusPoints",
+          "rotorRankingPointAchieved",
+          "techFoulCount",
+          "teleopFuelHigh",
+          "teleopFuelLow",
+          "teleopFuelPoints",
+          "teleopPoints",
+          "teleopRotorPoints",
+          "teleopTakeoffPoints",
+          "totalPoints",
+          "touchpadFar",
+          "touchpadMiddle",
+          "touchpadNear"
+        ],
         "properties": {
           "autoPoints": {
             "type": "integer"
@@ -6222,6 +6337,10 @@
       },
       "Match_Score_Breakdown_2018": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2018_Alliance"
@@ -6234,6 +6353,45 @@
       },
       "Match_Score_Breakdown_2018_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoOwnershipPoints",
+          "autoPoints",
+          "autoQuestRankingPoint",
+          "autoRobot1",
+          "autoRobot2",
+          "autoRobot3",
+          "autoRunPoints",
+          "autoScaleOwnershipSec",
+          "autoSwitchAtZero",
+          "autoSwitchOwnershipSec",
+          "endgamePoints",
+          "endgameRobot1",
+          "endgameRobot2",
+          "endgameRobot3",
+          "faceTheBossRankingPoint",
+          "foulCount",
+          "foulPoints",
+          "rp",
+          "tba_gameData",
+          "techFoulCount",
+          "teleopOwnershipPoints",
+          "teleopPoints",
+          "teleopScaleBoostSec",
+          "teleopScaleForceSec",
+          "teleopScaleOwnershipSec",
+          "teleopSwitchBoostSec",
+          "teleopSwitchForceSec",
+          "teleopSwitchOwnershipSec",
+          "totalPoints",
+          "vaultBoostPlayed",
+          "vaultBoostTotal",
+          "vaultForcePlayed",
+          "vaultForceTotal",
+          "vaultLevitatePlayed",
+          "vaultLevitateTotal",
+          "vaultPoints"
+        ],
         "properties": {
           "adjustPoints": {
             "type": "integer"
@@ -6351,6 +6509,39 @@
       },
       "Match_Timeseries_2018": {
         "type": "object",
+        "required": [
+          "blue_auto_quest",
+          "blue_boost_count",
+          "blue_boost_played",
+          "blue_current_powerup",
+          "blue_face_the_boss",
+          "blue_force_count",
+          "blue_force_played",
+          "blue_levitate_count",
+          "blue_levitate_played",
+          "blue_powerup_time_remaining",
+          "blue_scale_owned",
+          "blue_score",
+          "blue_switch_owned",
+          "event_key",
+          "match_id",
+          "mode",
+          "play",
+          "red_auto_quest",
+          "red_boost_count",
+          "red_boost_played",
+          "red_current_powerup",
+          "red_face_the_boss",
+          "red_force_count",
+          "red_force_played",
+          "red_levitate_count",
+          "red_levitate_played",
+          "red_powerup_time_remaining",
+          "red_scale_owned",
+          "red_score",
+          "red_switch_owned",
+          "time_remaining"
+        ],
         "properties": {
           "event_key": {
             "type": "string",
@@ -6480,6 +6671,10 @@
       },
       "Match_Score_Breakdown_2019": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2019_Alliance"
@@ -6492,6 +6687,59 @@
       },
       "Match_Score_Breakdown_2019_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoPoints",
+          "bay1",
+          "bay2",
+          "bay3",
+          "bay4",
+          "bay5",
+          "bay6",
+          "bay7",
+          "bay8",
+          "cargoPoints",
+          "completeRocketRankingPoint",
+          "completedRocketFar",
+          "completedRocketNear",
+          "endgameRobot1",
+          "endgameRobot2",
+          "endgameRobot3",
+          "foulCount",
+          "foulPoints",
+          "habClimbPoints",
+          "habDockingRankingPoint",
+          "habLineRobot1",
+          "habLineRobot2",
+          "habLineRobot3",
+          "hatchPanelPoints",
+          "lowLeftRocketFar",
+          "lowLeftRocketNear",
+          "lowRightRocketFar",
+          "lowRightRocketNear",
+          "midLeftRocketFar",
+          "midLeftRocketNear",
+          "midRightRocketFar",
+          "midRightRocketNear",
+          "preMatchBay1",
+          "preMatchBay2",
+          "preMatchBay3",
+          "preMatchBay6",
+          "preMatchBay7",
+          "preMatchBay8",
+          "preMatchLevelRobot1",
+          "preMatchLevelRobot2",
+          "preMatchLevelRobot3",
+          "rp",
+          "sandStormBonusPoints",
+          "techFoulCount",
+          "teleopPoints",
+          "topLeftRocketFar",
+          "topLeftRocketNear",
+          "topRightRocketFar",
+          "topRightRocketNear",
+          "totalPoints"
+        ],
         "properties": {
           "adjustPoints": {
             "type": "integer"
@@ -6650,6 +6898,10 @@
       },
       "Match_Score_Breakdown_2020": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2020_Alliance"
@@ -6662,6 +6914,42 @@
       },
       "Match_Score_Breakdown_2020_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoCellPoints",
+          "autoCellsBottom",
+          "autoCellsInner",
+          "autoCellsOuter",
+          "autoInitLinePoints",
+          "autoPoints",
+          "controlPanelPoints",
+          "endgamePoints",
+          "endgameRobot1",
+          "endgameRobot2",
+          "endgameRobot3",
+          "endgameRungIsLevel",
+          "foulCount",
+          "foulPoints",
+          "initLineRobot1",
+          "initLineRobot2",
+          "initLineRobot3",
+          "rp",
+          "shieldEnergizedRankingPoint",
+          "shieldOperationalRankingPoint",
+          "stage1Activated",
+          "stage2Activated",
+          "stage3Activated",
+          "stage3TargetColor",
+          "tba_numRobotsHanging",
+          "tba_shieldEnergizedRankingPointFromFoul",
+          "techFoulCount",
+          "teleopCellPoints",
+          "teleopCellsBottom",
+          "teleopCellsInner",
+          "teleopCellsOuter",
+          "teleopPoints",
+          "totalPoints"
+        ],
         "properties": {
           "initLineRobot1": {
             "type": "string"
@@ -6771,6 +7059,10 @@
       },
       "Match_Score_Breakdown_2022": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2022_Alliance"
@@ -6783,6 +7075,48 @@
       },
       "Match_Score_Breakdown_2022_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoCargoLowerBlue",
+          "autoCargoLowerFar",
+          "autoCargoLowerNear",
+          "autoCargoLowerRed",
+          "autoCargoPoints",
+          "autoCargoTotal",
+          "autoCargoUpperBlue",
+          "autoCargoUpperFar",
+          "autoCargoUpperNear",
+          "autoCargoUpperRed",
+          "autoPoints",
+          "autoTaxiPoints",
+          "cargoBonusRankingPoint",
+          "endgamePoints",
+          "endgameRobot1",
+          "endgameRobot2",
+          "endgameRobot3",
+          "foulCount",
+          "foulPoints",
+          "hangarBonusRankingPoint",
+          "matchCargoTotal",
+          "quintetAchieved",
+          "rp",
+          "taxiRobot1",
+          "taxiRobot2",
+          "taxiRobot3",
+          "techFoulCount",
+          "teleopCargoLowerBlue",
+          "teleopCargoLowerFar",
+          "teleopCargoLowerNear",
+          "teleopCargoLowerRed",
+          "teleopCargoPoints",
+          "teleopCargoTotal",
+          "teleopCargoUpperBlue",
+          "teleopCargoUpperFar",
+          "teleopCargoUpperNear",
+          "teleopCargoUpperRed",
+          "teleopPoints",
+          "totalPoints"
+        ],
         "properties": {
           "taxiRobot1": {
             "type": "string",
@@ -6941,6 +7275,10 @@
       },
       "Match_Score_Breakdown_2023": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2023_Alliance"
@@ -6953,6 +7291,46 @@
       },
       "Match_Score_Breakdown_2023_Alliance": {
         "type": "object",
+        "required": [
+          "activationBonusAchieved",
+          "adjustPoints",
+          "autoBridgeState",
+          "autoChargeStationPoints",
+          "autoChargeStationRobot1",
+          "autoChargeStationRobot2",
+          "autoChargeStationRobot3",
+          "autoCommunity",
+          "autoDocked",
+          "autoGamePieceCount",
+          "autoGamePiecePoints",
+          "autoMobilityPoints",
+          "autoPoints",
+          "coopGamePieceCount",
+          "coopertitionCriteriaMet",
+          "endGameBridgeState",
+          "endGameChargeStationPoints",
+          "endGameChargeStationRobot1",
+          "endGameChargeStationRobot2",
+          "endGameChargeStationRobot3",
+          "endGameParkPoints",
+          "extraGamePieceCount",
+          "foulCount",
+          "foulPoints",
+          "linkPoints",
+          "links",
+          "mobilityRobot1",
+          "mobilityRobot2",
+          "mobilityRobot3",
+          "rp",
+          "sustainabilityBonusAchieved",
+          "techFoulCount",
+          "teleopCommunity",
+          "teleopGamePieceCount",
+          "teleopGamePiecePoints",
+          "teleopPoints",
+          "totalChargeStationPoints",
+          "totalPoints"
+        ],
         "properties": {
           "activationBonusAchieved": {
             "type": "boolean"
@@ -6996,6 +7374,11 @@
           },
           "autoCommunity": {
             "type": "object",
+            "required": [
+              "B",
+              "M",
+              "T"
+            ],
             "properties": {
               "B": {
                 "type": "array",
@@ -7124,6 +7507,10 @@
             "type": "array",
             "items": {
               "type": "object",
+              "required": [
+                "nodes",
+                "row"
+              ],
               "properties": {
                 "nodes": {
                   "type": "array",
@@ -7152,6 +7539,11 @@
           },
           "teleopCommunity": {
             "type": "object",
+            "required": [
+              "B",
+              "M",
+              "T"
+            ],
             "properties": {
               "B": {
                 "type": "array",
@@ -7210,6 +7602,10 @@
       },
       "Match_Score_Breakdown_2024": {
         "type": "object",
+        "required": [
+          "blue",
+          "red"
+        ],
         "properties": {
           "blue": {
             "$ref": "#/components/schemas/Match_Score_Breakdown_2024_Alliance"
@@ -7222,6 +7618,60 @@
       },
       "Match_Score_Breakdown_2024_Alliance": {
         "type": "object",
+        "required": [
+          "adjustPoints",
+          "autoAmpNoteCount",
+          "autoAmpNotePoints",
+          "autoLeavePoints",
+          "autoLineRobot1",
+          "autoLineRobot2",
+          "autoLineRobot3",
+          "autoPoints",
+          "autoSpeakerNoteCount",
+          "autoSpeakerNotePoints",
+          "autoTotalNotePoints",
+          "coopNotePlayed",
+          "coopertitionBonusAchieved",
+          "coopertitionCriteriaMet",
+          "endGameHarmonyPoints",
+          "endGameNoteInTrapPoints",
+          "endGameOnStagePoints",
+          "endGameParkPoints",
+          "endGameRobot1",
+          "endGameRobot2",
+          "endGameRobot3",
+          "endGameSpotLightBonusPoints",
+          "endGameTotalStagePoints",
+          "ensembleBonusAchieved",
+          "ensembleBonusOnStageRobotsThreshold",
+          "ensembleBonusStagePointsThreshold",
+          "foulCount",
+          "foulPoints",
+          "g206Penalty",
+          "g408Penalty",
+          "g424Penalty",
+          "melodyBonusAchieved",
+          "melodyBonusThreshold",
+          "melodyBonusThresholdCoop",
+          "melodyBonusThresholdNonCoop",
+          "micCenterStage",
+          "micStageLeft",
+          "micStageRight",
+          "rp",
+          "techFoulCount",
+          "teleopAmpNoteCount",
+          "teleopAmpNotePoints",
+          "teleopPoints",
+          "teleopSpeakerNoteAmplifiedCount",
+          "teleopSpeakerNoteAmplifiedPoints",
+          "teleopSpeakerNoteCount",
+          "teleopSpeakerNotePoints",
+          "teleopTotalNotePoints",
+          "totalPoints",
+          "trapCenterStage",
+          "trapStageLeft",
+          "trapStageRight"
+        ],
         "properties": {
           "adjustPoints": {
             "type": "integer"

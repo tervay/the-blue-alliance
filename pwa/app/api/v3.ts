@@ -982,6 +982,14 @@ export type DistrictRanking = {
     qual_points: number;
   }[];
 };
+export type LeaderboardInsight = {
+  data?: {
+    value?: number;
+    team_keys?: string[];
+  }[];
+  name?: string;
+  year?: number;
+};
 /**
  * Returns API status, and TBA status information.
  */
@@ -3577,4 +3585,29 @@ export function getDistrictRankings(
       'If-None-Match': ifNoneMatch,
     }),
   });
+}
+/**
+ * Gets all leaderboard-type insights.
+ */
+export function getInsightsLeaderboardAll(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.ok(
+    oazapfts.fetchJson<
+      | {
+          status: 200;
+          data: LeaderboardInsight[];
+        }
+      | {
+          status: 304;
+        }
+      | {
+          status: 401;
+          data: {
+            /** Authorization error description. */
+            Error: string;
+          };
+        }
+    >('/insights/leaderboards/all', {
+      ...opts,
+    }),
+  );
 }

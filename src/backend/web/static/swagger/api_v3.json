@@ -4108,6 +4108,58 @@
           }
         ]
       }
+    },
+    "/insights/leaderboards/all": {
+      "summary": "Gets all leaderboard-type insights.",
+      "description": "Gets all leaderboard-type insights.",
+      "get": {
+        "summary": "Gets all leaderboard-type insights.",
+        "description": "Gets all leaderboard-type insights.",
+        "operationId": "getInsightsLeaderboardAll",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Cache-Control": {
+                "description": "The `Cache-Control` header, in particular the `max-age` value, contains the number of seconds the result should be considered valid for. During this time subsequent calls should return from the local cache directly.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "description": "Specifies the version of the most recent response. Used by clients in the `If-None-Match` request header.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaderboardInsight"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "tags": [
+          "insights"
+        ]
+      }
     }
   },
   "components": {
@@ -7999,6 +8051,34 @@
             "type": "string",
             "nullable": true,
             "description": "File identification as may be required for some types. May be null."
+          }
+        }
+      },
+      "LeaderboardInsight": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "integer"
+                },
+                "team_keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "year": {
+            "type": "integer"
           }
         }
       }

@@ -776,7 +776,7 @@ class InsightsHelper(object):
         Returns a list of Insights where, depending on the Insight, the data
         is either a team or a list of teams
         """
-        ca_winner = None
+        ca_winners = []
         world_champions = []
         world_finalists = []
         division_winners = []
@@ -787,7 +787,7 @@ class InsightsHelper(object):
                 team_key_name = team_key.id()
                 if award.event_type_enum == EventType.CMP_FINALS:
                     if award.award_type_enum == AwardType.CHAIRMANS:
-                        ca_winner = team_key_name
+                        ca_winners.append(team_key_name)
                     elif award.award_type_enum == AwardType.WINNER:
                         world_champions.append(team_key_name)
                     elif award.award_type_enum == AwardType.FINALIST:
@@ -804,17 +804,17 @@ class InsightsHelper(object):
         division_finalists = self._sortTeamList(division_finalists)
 
         insights = []
-        if ca_winner is not None:
+        if ca_winners != []:
             insights += [
                 self._createInsight(
-                    ca_winner, Insight.INSIGHT_NAMES[Insight.CA_WINNER], year
+                    ca_winners, Insight.INSIGHT_NAMES[Insight.CA_WINNER], year
                 )
             ]
         if world_champions != []:
             insights += [
                 self._createInsight(
                     world_champions,
-                    Insight.INSIGHT_NAMES[Insight.WORLD_CHAMPIONS],
+                    Insight.INSIGHT_NAMES[Insight.WORLD_CHAMPIONS_BY_YEAR],
                     year,
                 )
             ]
@@ -949,6 +949,8 @@ class InsightsHelper(object):
         """
         insights = []
 
+        print('doing awards?\n\n\n\n')
+
         year_regional_winners = Insight.query(
             Insight.name == Insight.INSIGHT_NAMES[Insight.REGIONAL_DISTRICT_WINNERS],
             Insight.year != 0,
@@ -979,7 +981,7 @@ class InsightsHelper(object):
                 rca_winners[team] += 1
 
         year_world_champions = Insight.query(
-            Insight.name == Insight.INSIGHT_NAMES[Insight.WORLD_CHAMPIONS],
+            Insight.name == Insight.INSIGHT_NAMES[Insight.WORLD_CHAMPIONS_BY_YEAR],
             Insight.year != 0,
         ).fetch(1000)
         world_champions = defaultdict(list)

@@ -81,6 +81,12 @@ class InsightsHelper(object):
         insights += self._calculateNumMatches(week_event_matches, year)
         insights += self._calculateYearSpecific(week_event_matches, year)
         insights += self._calculateMatchesByTeam(week_event_matches, year)
+
+        # leaderboard (exposed in API)
+        insights += self._calculate_leaderboard_most_matches_played_by_team(
+            week_event_matches, year
+        )
+
         return insights
 
     @classmethod
@@ -122,6 +128,9 @@ class InsightsHelper(object):
         insights += self._calculateChampionshipStats(award_futures, year)
         insights += self._calculateRegionalStats(award_futures, year)
         insights += self._calculateSuccessfulElimTeamups(award_futures, year)
+
+        # leaderboards (exposed in API)
+        insights += self._calculate_leaderboard_blue_banners(award_futures, year)
 
         return insights
 
@@ -225,6 +234,58 @@ class InsightsHelper(object):
             year=year,
             data_json=json.dumps(data),
         )
+
+    @classmethod
+    def _create_leaderboard_from_dict_counts(
+        cls, dict: Dict[TeamKey, int], insight_type: int, year: int
+    ) -> Insight:
+        sorted_leaderboard_tuples = cls._sortTeamWinsDict(dict)
+        leaderboard_data = [
+            {"value": value, "team_keys": team_list}
+            for (value, team_list) in sorted_leaderboard_tuples[:25]
+        ]
+
+        return cls._createInsight(
+            data=leaderboard_data,
+            name=Insight.INSIGHT_NAMES[insight_type],
+            year=year,
+        )
+
+    @classmethod
+    def _calculate_leaderboard_blue_banners(
+        cls, award_futures: List[TypedFuture[Award]], year: Year
+    ) -> List[Insight]:
+        data = defaultdict(int)
+        for award_future in award_futures:
+            award = award_future.get_result()
+            if award.award_type_enum in BLUE_BANNER_AWARDS and award.count_banner:
+                for team_key in award.team_list:
+                    data[team_key.id()] += 1
+
+        return [
+            cls._create_leaderboard_from_dict_counts(
+                data, Insight.TYPED_LEADERBOARD_BLUE_BANNERS, year
+            )
+        ]
+
+    @classmethod
+    def _calculate_leaderboard_most_matches_played_by_team(
+        cls, week_event_matches: List[WeekEventMatches], year: Year
+    ) -> List[Insight]:
+        counter = defaultdict(lambda: 0)
+        for _, week_events in week_event_matches:
+            for _, matches in week_events:
+                for match in matches:
+                    if match.has_been_played:
+                        for alliance in match.alliances.values():
+                            for tk in alliance["teams"]:
+                                counter[tk] += 1
+
+        return [
+            cls._create_leaderboard_from_dict_counts(
+                counter, Insight.TYPED_LEADERBOARD_MOST_MATCHES_PLAYED, year
+            )
+        ]
 
     @classmethod
     def _generateMatchData(self, match: Match, event: Event) -> Dict:
@@ -940,6 +1001,8 @@ class InsightsHelper(object):
                 )
             )
 
+        insights.extend(self.do_overall_leaderboard_match_insights())
+
         return insights
 
     @classmethod
@@ -1088,4 +1151,48 @@ class InsightsHelper(object):
                 )
             )
 
+        insights.extend(self.do_overall_leaderboard_award_insights())
+
         return insights
+
+    @classmethod
+    def do_overall_leaderboard_award_insights(cls) -> List[Insight]:
+        overall_insights = []
+        for insight_type in Insight.TYPED_LEADERBOARD_AWARD_INSIGHTS:
+            insights = Insight.query(
+                Insight.name == Insight.INSIGHT_NAMES[insight_type],
+                Insight.year != 0,
+            ).fetch(1000)
+
+            data = defaultdict(int)
+            for insight in insights:
+                for leaderboard_ranking in insight.data:
+                    for team in leaderboard_ranking["team_keys"]:
+                        data[team] += leaderboard_ranking["value"]
+
+            overall_insights.append(
+                cls._create_leaderboard_from_dict_counts(data, insight_type, year=0)
+            )
+
+        return overall_insights
+
+    @classmethod
+    def do_overall_leaderboard_match_insights(cls) -> List[Insight]:
+        overall_insights = []
+        for insight_type in Insight.TYPED_LEADERBOARD_MATCH_INSIGHTS:
+            insights = Insight.query(
+                Insight.name == Insight.INSIGHT_NAMES[insight_type],
+                Insight.year != 0,
+            ).fetch(1000)
+
+            data = defaultdict(int)
+            for insight in insights:
+                for leaderboard_ranking in insight.data:
+                    for team in leaderboard_ranking["team_keys"]:
+                        data[team] += leaderboard_ranking["value"]
+
+            overall_insights.append(
+                cls._create_leaderboard_from_dict_counts(data, insight_type, year=0)
+            )
+
+        return overall_insights

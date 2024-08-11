@@ -16,7 +16,7 @@ def auto_add_ndb_context(ndb_context) -> None:
 
 
 def api_data_to_matchstats(
-    api_data: Dict[StatType, Dict[TeamKey, float]]
+    api_data: Dict[StatType, Dict[TeamKey, float]],
 ) -> EventMatchStats:
     data: EventMatchStats = {}
     for stat_type in StatType:

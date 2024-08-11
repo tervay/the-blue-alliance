@@ -7,6 +7,7 @@ from werkzeug.wrappers import Response
 
 from backend.common.consts.insight_type import InsightType
 from backend.common.helpers.insights_helper import InsightsHelper
+from backend.common.helpers.insights_typed_helper import InsightsTypedHelper
 from backend.common.helpers.season_helper import SeasonHelper
 from backend.common.manipulators.insight_manipulator import InsightManipulator
 from backend.common.models.keys import Year
@@ -124,6 +125,43 @@ def do_overall_insights(kind: str) -> Response:
         return make_response(
             render_template(
                 "math/overall_insights_do.html", kind=kind, insights=insights
+            )
+        )
+
+    return make_response("")
+
+
+@blueprint.route("/backend-tasks-b2/math/enqueue/typedinsights/leaderboards/all")
+def enqueue_typed_insights_leaderboards() -> Response:
+    taskqueue.add(
+        url=url_for("insights.do_typed_insights_leaderboards"),
+        method="GET",
+        target="py3-tasks-cpu",
+        queue_name="default",
+    )
+
+    if (
+        "X-Appengine-Taskname" not in request.headers
+    ):  # Only write out if not in taskqueue
+        return make_response(
+            render_template("math/overall_insights_enqueue.html", kind="leaderboards")
+        )
+
+    return make_response("")
+
+
+@blueprint.route("/backend-tasks-b2/math/do/typedinsights/leaderboards/all")
+def do_typed_insights_leaderboards() -> Response:
+    insights = InsightsTypedHelper.get_insights()
+    if insights is not None:
+        InsightManipulator.createOrUpdate(insights)
+
+    if (
+        "X-Appengine-Taskname" not in request.headers
+    ):  # Only write out if not in taskqueue
+        return make_response(
+            render_template(
+                "math/overall_insights_do.html", kind="leaderboards", insights=insights
             )
         )
 

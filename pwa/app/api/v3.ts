@@ -1,6 +1,6 @@
 /**
  * The Blue Alliance API v3
- * 3.8.2
+ * 3.9.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -981,6 +981,14 @@ export type DistrictRanking = {
     /** Points awarded for qualification match performance. */
     qual_points: number;
   }[];
+};
+export type LeaderboardInsight = {
+  data: {
+    value: number;
+    team_keys: string[];
+  }[];
+  name: string;
+  year: number;
 };
 /**
  * Returns API status, and TBA status information.
@@ -3572,6 +3580,80 @@ export function getDistrictRankings(
         status: 404;
       }
   >(`/district/${encodeURIComponent(districtKey)}/rankings`, {
+    ...opts,
+    headers: oazapfts.mergeHeaders(opts?.headers, {
+      'If-None-Match': ifNoneMatch,
+    }),
+  });
+}
+/**
+ * fixme
+ */
+export function getInsightsLeaderboardsAll(
+  {
+    ifNoneMatch,
+  }: {
+    ifNoneMatch?: string;
+  },
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200;
+        data: LeaderboardInsight[];
+      }
+    | {
+        status: 304;
+      }
+    | {
+        status: 401;
+        data: {
+          /** Authorization error description. */
+          Error: string;
+        };
+      }
+    | {
+        status: 404;
+      }
+  >('/insights/leaderboards/all', {
+    ...opts,
+    headers: oazapfts.mergeHeaders(opts?.headers, {
+      'If-None-Match': ifNoneMatch,
+    }),
+  });
+}
+/**
+ * fixme
+ */
+export function getInsightsLeaderboardsYear(
+  {
+    ifNoneMatch,
+    year,
+  }: {
+    ifNoneMatch?: string;
+    year: number;
+  },
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200;
+        data: LeaderboardInsight[];
+      }
+    | {
+        status: 304;
+      }
+    | {
+        status: 401;
+        data: {
+          /** Authorization error description. */
+          Error: string;
+        };
+      }
+    | {
+        status: 404;
+      }
+  >(`/insights/leaderboards/${encodeURIComponent(year)}`, {
     ...opts,
     headers: oazapfts.mergeHeaders(opts?.headers, {
       'If-None-Match': ifNoneMatch,

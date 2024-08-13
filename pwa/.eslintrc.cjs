@@ -54,6 +54,9 @@ module.exports = {
           typescript: {},
         },
       },
+      rules: {
+        'jsx-a11y/no-noninteractive-element-interactions': 'off',
+      },
     },
 
     // Typescript

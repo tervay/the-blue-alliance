@@ -157,7 +157,7 @@ export default function EventPage() {
         <InlineIcon>
           <BiCalendar />
           {getEventDateString(event, 'long')}
-          {event.week !== undefined && event.week !== null && (
+          {event.week !== null && (
             <Badge className="mx-2 h-[1.5em] align-text-top">
               Week {event.week + 1}
             </Badge>
@@ -262,7 +262,7 @@ export default function EventPage() {
           <RankingsTable
             rankings={rankings}
             winners={
-              alliances?.find((a) => a.status?.status === 'won')?.picks ?? []
+              alliances?.find((a) => a.status.status === 'won')?.picks ?? []
             }
           />
         </TabsContent>

@@ -122,6 +122,7 @@ module.exports = {
               'size',
               'sideOffset',
               'shouldScaleBackground',
+              'orientation',
             ],
           },
         ],

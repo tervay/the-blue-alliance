@@ -28,3 +28,21 @@ def insights_leaderboards_year(year: int) -> Response:
         insights.extend(future.get_result())
 
     return profiled_jsonify(insights)
+
+
+def insights_notables_year(year: int) -> Response:
+    track_call_after_response("insights/notables", str(year))
+
+    futures = []
+    for insight_type in Insight.NOTABLE_INSIGHTS:
+        futures.append(
+            InsightsByNameAndYearQuery(
+                insight_name=Insight.INSIGHT_NAMES[insight_type], year=year
+            ).fetch_dict_async(ApiMajorVersion.API_V3)
+        )
+
+    insights = []
+    for future in futures:
+        insights.extend(future.get_result())
+
+    return profiled_jsonify(insights)

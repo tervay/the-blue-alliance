@@ -24,12 +24,14 @@ import {
   Award,
   Event,
   Match,
+  Media,
   Team,
   getEvent,
   getEventAlliances,
   getEventAwards,
   getEventMatches,
   getEventRankings,
+  getEventTeamMedia,
   getEventTeams,
 } from '~/api/v3';
 import AllianceSelectionTable from '~/components/tba/allianceSelectionTable';
@@ -62,7 +64,7 @@ async function loadData(params: Params) {
     throw new Error('Missing eventKey');
   }
 
-  const [event, matches, alliances, rankings, awards, teams] =
+  const [event, matches, alliances, rankings, awards, teams, teamMedia] =
     await Promise.all([
       getEvent({ eventKey: params.eventKey }),
       getEventMatches({ eventKey: params.eventKey }),
@@ -70,6 +72,7 @@ async function loadData(params: Params) {
       getEventRankings({ eventKey: params.eventKey }),
       getEventAwards({ eventKey: params.eventKey }),
       getEventTeams({ eventKey: params.eventKey }),
+      getEventTeamMedia({ eventKey: params.eventKey }),
     ]);
 
   if (event.status == 404) {
@@ -84,7 +87,8 @@ async function loadData(params: Params) {
     alliances.status !== 200 ||
     rankings.status !== 200 ||
     awards.status !== 200 ||
-    teams.status !== 200
+    teams.status !== 200 ||
+    teamMedia.status !== 200
   ) {
     throw new Response(null, {
       status: 500,
@@ -98,6 +102,7 @@ async function loadData(params: Params) {
     rankings: rankings.data,
     awards: awards.data,
     teams: teams.data,
+    teamMedia: teamMedia.data,
   };
 }
 
@@ -120,7 +125,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function EventPage() {
-  const { event, alliances, matches, rankings, awards, teams } =
+  const { event, alliances, matches, rankings, awards, teams, teamMedia } =
     useLoaderData<typeof loader>();
 
   const sortedMatches = useMemo(
@@ -296,7 +301,12 @@ export default function EventPage() {
         </TabsContent>
 
         <TabsContent value="teams">
-          <TeamsTab teams={teams} matches={sortedMatches} event={event} />
+          <TeamsTab
+            teams={teams}
+            matches={sortedMatches}
+            event={event}
+            media={teamMedia}
+          />
         </TabsContent>
 
         <TabsContent value="insights">insights</TabsContent>
@@ -349,24 +359,24 @@ function TeamsTab({
   teams,
   matches,
   event,
+  media,
 }: {
   teams: Team[];
   matches: Match[];
   event: Event;
+  media: Media[];
 }) {
   teams.sort(sortTeamsComparator);
 
-  // Lot todo here:
-  // 1. add robot images
-  // 2. create a TeamEvent component that shows schedule, etc, which is inside CredenzaBody
-  // 3. add hover effects
-  // 4. split out CredenzaTrigger, so the same UI (Body) can be triggered by different UI elements
+  // todo
+  // 1. add hover effects
+  // 2. split out CredenzaTrigger, so the same UI (Body) can be triggered by different UI elements
   return (
     <div className="md:columns-2">
       {teams.map((t) => (
         <Credenza key={t.key}>
           <CredenzaTrigger asChild>
-            <Card className="my-1 flex cursor-pointer items-center gap-4 rounded-lg bg-background p-4">
+            <Card className="content-visibility-auto my-0 mb-1 flex h-[150px] cursor-pointer items-center gap-4 rounded-lg bg-background p-4">
               <div className="grid flex-1 gap-1">
                 <div className="font-medium">
                   {t.team_number} - {t.nickname}
@@ -375,11 +385,20 @@ function TeamsTab({
                   {t.city}, {t.state_prov}, {t.country}
                 </div>
               </div>
-              <img
-                src="https://placehold.co/400x400"
-                alt=""
-                className="size-20"
-              />
+              {(() => {
+                const maybeImage = getTeamRobotPic(
+                  media.filter((m) => m.team_keys.includes(t.key)),
+                );
+
+                return maybeImage === undefined ? null : (
+                  <img
+                    src={maybeImage}
+                    alt={`${t.team_number}'s robot`}
+                    className="h-full w-1/3 rounded-lg border-4 border-neutral-400 object-cover"
+                    loading="lazy"
+                  />
+                );
+              })()}
             </Card>
           </CredenzaTrigger>
           <CredenzaContent>
@@ -415,4 +434,34 @@ function TeamsTab({
       ))}
     </div>
   );
+}
+
+function getTeamRobotPic(media: Media[]): string | undefined {
+  const pics = media.filter((m) =>
+    ['imgur', 'cdphotothread', 'instagram-image', 'external-link'].includes(
+      m.type,
+    ),
+  );
+
+  if (pics.length === 0) {
+    return undefined;
+  }
+
+  const maybePreferred = pics.find((m) => m.preferred);
+
+  function imageUrl(media: Media) {
+    if (media.type === 'imgur') {
+      return `https://i.imgur.com/${media.foreign_key}s.jpg`;
+    }
+
+    if (media.type === 'instagram-image') {
+      return `https://www.thebluealliance.com/instagram_oembed/${media.foreign_key}`;
+    }
+
+    return media.direct_url;
+  }
+
+  return maybePreferred === undefined
+    ? imageUrl(pics[0])
+    : imageUrl(maybePreferred);
 }

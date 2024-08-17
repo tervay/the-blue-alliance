@@ -7800,7 +7800,8 @@
       "Media": {
         "required": [
           "type",
-          "foreign_key"
+          "foreign_key",
+          "team_keys"
         ],
         "type": "object",
         "properties": {

@@ -16,6 +16,7 @@ from backend.common.consts.event_type import (
     CMP_EVENT_TYPES,
     NON_CMP_EVENT_TYPES,
     EventType,
+    NON_CMP_EVENT_TYPES,
     SEASON_EVENT_TYPES,
 )
 from backend.common.consts.insight_type import InsightType

@@ -79,9 +79,7 @@ class InsightsHelper(object):
             Event.query(Event.year == year).order(Event.start_date).fetch(1000)
         )
         events_by_week = EventHelper.group_by_week(official_events)
-        week_event_matches = (
-            []
-        )  # Tuples of: (week, events) where events are tuples of (event, matches)
+        week_event_matches = []  # Tuples of: (week, events) where events are tuples of (event, matches)
         for week, events in events_by_week.items():
             if week in {OFFSEASON_EVENTS_LABEL, PRESEASON_EVENTS_LABEL}:
                 continue
@@ -159,7 +157,12 @@ class InsightsHelper(object):
         insights += self._calculateSuccessfulElimTeamups(award_futures, year)
 
         # leaderboards (exposed in API)
-        insights += self._calculate_leaderboard_blue_banners(award_futures, year)
+        insights += self._calculate_leaderboard_most_awards_and_most_blue_banners(
+            award_futures, year
+        )
+        insights += self._calculate_leaderboard_most_regional_district_event_wins(
+            award_futures, year
+        )
 
         return insights
 
@@ -290,20 +293,45 @@ class InsightsHelper(object):
         )
 
     @classmethod
-    def _calculate_leaderboard_blue_banners(
+    def _calculate_leaderboard_most_awards_and_most_blue_banners(
         cls, award_futures: List[TypedFuture[Award]], year: Year
     ) -> List[Insight]:
-        data = defaultdict(int)
+        banner_count = defaultdict(int)
+        award_count = defaultdict(int)
         for award_future in award_futures:
             award = award_future.get_result()
-            if award.award_type_enum in BLUE_BANNER_AWARDS and award.count_banner:
-                for team_key in award.team_list:
-                    data[team_key.id()] += 1
+            for team_key in award.team_list:
+                award_count[team_key.id()] += 1
+                if award.award_type_enum in BLUE_BANNER_AWARDS and award.count_banner:
+                    banner_count[team_key.id()] += 1
 
         return [
             cls._create_leaderboard_from_dict_counts(
-                data, Insight.TYPED_LEADERBOARD_BLUE_BANNERS, year
-            )
+                banner_count, Insight.TYPED_LEADERBOARD_BLUE_BANNERS, year
+            ),
+            cls._create_leaderboard_from_dict_counts(
+                award_count, Insight.TYPED_LEADERBOARD_MOST_AWARDS, year
+            ),
+        ]
+
+    @classmethod
+    def _calculate_leaderboard_most_regional_district_event_wins(
+        cls, award_futures: List[TypedFuture[Award]], year: Year
+    ) -> List[Insight]:
+        count = defaultdict(int)
+        for award_future in award_futures:
+            award = award_future.get_result()
+            if award.award_type_enum == AwardType.WINNER and award.event_type_enum in [
+                EventType.REGIONAL,
+                EventType.DISTRICT,
+            ]:
+                for team_key in award.team_list:
+                    count[team_key.id()] += 1
+
+        return [
+            cls._create_leaderboard_from_dict_counts(
+                count, Insight.TYPED_LEADERBOARD_MOST_REGIONAL_DISTRICT_EVENT_WINS, year
+            ),
         ]
 
     @classmethod
@@ -473,9 +501,7 @@ class InsightsHelper(object):
         Returns an Insight where the data is a list of tuples:
         (week string, list of highest scoring matches)
         """
-        highscore_matches_by_week = (
-            []
-        )  # tuples: week, list of matches (if there are ties)
+        highscore_matches_by_week = []  # tuples: week, list of matches (if there are ties)
         for week, week_events in week_event_matches:
             week_highscore_matches = []
             highscore = 0
@@ -840,9 +866,9 @@ class InsightsHelper(object):
                 roundedScore = margin - int(margin % binAmount) + binAmount / 2
                 contribution = float(amount) * 100 / totalCount
                 if roundedScore in elim_winning_margin_distribution_normalized:
-                    elim_winning_margin_distribution_normalized[
-                        roundedScore
-                    ] += contribution
+                    elim_winning_margin_distribution_normalized[roundedScore] += (
+                        contribution
+                    )
                 else:
                     elim_winning_margin_distribution_normalized[roundedScore] = (
                         contribution

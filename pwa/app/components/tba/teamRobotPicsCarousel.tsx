@@ -17,7 +17,7 @@ export default function TeamRobotPicsCarousel({
 }): JSX.Element {
   return (
     <Carousel
-      className="mx-12 w-full max-w-xs"
+      className="w-full max-w-xs md:mx-12"
       plugins={[Autoplay({ delay: 5000 })]}
     >
       <CarouselContent>

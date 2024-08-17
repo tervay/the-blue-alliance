@@ -15,10 +15,11 @@ import BiInfoCircleFill from '~icons/bi/info-circle-fill';
 import BiLink from '~icons/bi/link';
 import BiPinMapFill from '~icons/bi/pin-map-fill';
 
-import { getTeam, getTeamMediaByYear } from '~/api/v3';
+import { getTeam, getTeamMediaByYear, getTeamSocialMedia } from '~/api/v3';
 import InlineIcon from '~/components/tba/inlineIcon';
 import TeamAvatar from '~/components/tba/teamAvatar';
 import TeamRobotPicsCarousel from '~/components/tba/teamRobotPicsCarousel';
+import TeamSocialMediaList from '~/components/tba/teamSocialMediaList';
 import {
   Accordion,
   AccordionContent,
@@ -40,20 +41,21 @@ async function loadData(params: Params) {
   // todo: add year support
   const year = 2024;
 
-  const [team, media] = await Promise.all([
+  const [team, media, socials] = await Promise.all([
     getTeam({ teamKey }),
     getTeamMediaByYear({ teamKey, year }),
+    getTeamSocialMedia({ teamKey }),
   ]);
 
   if (team.status === 404) {
     throw new Response(null, { status: 404 });
   }
 
-  if (team.status !== 200 || media.status !== 200) {
+  if (team.status !== 200 || media.status !== 200 || socials.status !== 200) {
     throw new Response(null, { status: 500 });
   }
 
-  return { team: team.data, media: media.data };
+  return { team: team.data, media: media.data, socials: socials.data };
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -79,7 +81,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function TeamPage(): JSX.Element {
-  const { team, media } = useLoaderData<typeof loader>();
+  const { team, media, socials } = useLoaderData<typeof loader>();
 
   const robotPics = useMemo(
     () =>
@@ -108,8 +110,8 @@ export default function TeamPage(): JSX.Element {
     team.school_name ?? attemptToParseSchoolNameFromOldTeamName(team.name);
 
   return (
-    <div className="flex flex-wrap justify-center">
-      <div className="basis-1/2">
+    <div className="flex flex-wrap justify-between">
+      <div className="md:flex-none md:basis-3/5">
         <h1 className="mb-2.5 mt-5 text-4xl">
           {maybeAvatar && <TeamAvatar media={maybeAvatar} />}
           Team {team.team_number} - {team.nickname}
@@ -172,8 +174,12 @@ export default function TeamPage(): JSX.Element {
             Statbotics
           </Link>
         </InlineIcon>
+
+        <div className="flex flex-wrap justify-center md:justify-start">
+          <TeamSocialMediaList socials={socials} />
+        </div>
       </div>
-      <div className="">
+      <div className="flex w-full justify-center sm:relative sm:w-auto">
         <TeamRobotPicsCarousel media={robotPics} />
       </div>
     </div>

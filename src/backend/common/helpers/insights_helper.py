@@ -15,6 +15,7 @@ from backend.common.consts.comp_level import CompLevel, ELIM_LEVELS
 from backend.common.consts.event_type import (
     CMP_EVENT_TYPES,
     EventType,
+    NON_CMP_EVENT_TYPES,
     SEASON_EVENT_TYPES,
 )
 from backend.common.consts.insight_type import InsightType
@@ -159,7 +160,12 @@ class InsightsHelper(object):
         insights += self._calculateSuccessfulElimTeamups(award_futures, year)
 
         # leaderboards (exposed in API)
-        insights += self._calculate_leaderboard_blue_banners(award_futures, year)
+        insights += self._calculate_leaderboard_most_awards_and_most_blue_banners(
+            award_futures, year
+        )
+        insights += self._calculate_leaderboard_most_qualifying_event_wins(
+            award_futures, year
+        )
 
         return insights
 
@@ -290,20 +296,45 @@ class InsightsHelper(object):
         )
 
     @classmethod
-    def _calculate_leaderboard_blue_banners(
+    def _calculate_leaderboard_most_awards_and_most_blue_banners(
         cls, award_futures: List[TypedFuture[Award]], year: Year
     ) -> List[Insight]:
-        data = defaultdict(int)
+        banner_count = defaultdict(int)
+        award_count = defaultdict(int)
         for award_future in award_futures:
             award = award_future.get_result()
-            if award.award_type_enum in BLUE_BANNER_AWARDS and award.count_banner:
-                for team_key in award.team_list:
-                    data[team_key.id()] += 1
+            for team_key in award.team_list:
+                award_count[team_key.id()] += 1
+                if award.award_type_enum in BLUE_BANNER_AWARDS and award.count_banner:
+                    banner_count[team_key.id()] += 1
 
         return [
             cls._create_leaderboard_from_dict_counts(
-                data, Insight.TYPED_LEADERBOARD_BLUE_BANNERS, year
-            )
+                banner_count, Insight.TYPED_LEADERBOARD_BLUE_BANNERS, year
+            ),
+            cls._create_leaderboard_from_dict_counts(
+                award_count, Insight.TYPED_LEADERBOARD_MOST_AWARDS, year
+            ),
+        ]
+
+    @classmethod
+    def _calculate_leaderboard_most_qualifying_event_wins(
+        cls, award_futures: List[TypedFuture[Award]], year: Year
+    ) -> List[Insight]:
+        count = defaultdict(int)
+        for award_future in award_futures:
+            award = award_future.get_result()
+            if (
+                award.award_type_enum == AwardType.WINNER
+                and award.event_type_enum in NON_CMP_EVENT_TYPES
+            ):
+                for team_key in award.team_list:
+                    count[team_key.id()] += 1
+
+        return [
+            cls._create_leaderboard_from_dict_counts(
+                count, Insight.TYPED_LEADERBOARD_MOST_QUALIFYING_EVENT_WINS, year
+            ),
         ]
 
     @classmethod
